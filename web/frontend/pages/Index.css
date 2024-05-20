@@ -1,0 +1,19 @@
+.removeOption {
+    cursor: pointer !important;
+    color: red;
+    border: 1px solid;
+    padding: 5px 5px 5px 5px;
+}
+
+.notification-bar {
+    border: 2px solid green;
+    padding: 10px 372px;
+    background-color: green;
+    color: white;
+}
+
+.notification-bar span {
+    float: right;
+    margin-right: -175%;
+    cursor: pointer;
+}
