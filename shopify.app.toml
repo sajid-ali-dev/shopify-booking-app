@@ -3,7 +3,7 @@
 client_id = "ef4ed3c244eb57d223a52f776ed9f6fd"
 name = "oshi-app"
 handle = "oshi-app"
-application_url = "https://updates-repeated-van-licence.trycloudflare.com"
+application_url = "https://hudson-principal-fw-vulnerability.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_assigned_fulfillment_orders,read_customers,read_fulfillments,read
 
 [auth]
 redirect_urls = [
-  "https://updates-repeated-van-licence.trycloudflare.com/auth/callback",
-  "https://updates-repeated-van-licence.trycloudflare.com/auth/shopify/callback",
-  "https://updates-repeated-van-licence.trycloudflare.com/api/auth/callback"
+  "https://hudson-principal-fw-vulnerability.trycloudflare.com/auth/callback",
+  "https://hudson-principal-fw-vulnerability.trycloudflare.com/auth/shopify/callback",
+  "https://hudson-principal-fw-vulnerability.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
