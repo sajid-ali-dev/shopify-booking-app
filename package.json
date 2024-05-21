@@ -9,9 +9,7 @@
     "push": "shopify app push",
     "generate": "shopify app generate",
     "deploy": "shopify app deploy",
-    "info": "shopify app info",
-    "prod": "npm run production",
-    "production": "mix --production"
+    "info": "shopify app info"
   },
   "dependencies": {
     "@shopify/app": "3.56.3",
