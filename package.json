@@ -10,7 +10,7 @@
     "generate": "shopify app generate",
     "deploy": "shopify app deploy",
     "info": "shopify app info",
-    "prod": "npm run production",
+    "prod": "npm run production"
   },
   "dependencies": {
     "rsuite": "^5.60.2"
