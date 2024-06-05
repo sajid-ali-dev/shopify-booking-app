@@ -42,7 +42,7 @@ class OshiService
                     "source" => "", //optional
                     "shipment_services" => $data["shipper"],
                     "open_allow" => $data["parcel"],
-                    "client_order_id" => $data["id"],
+                    "client_order_id" => $data["name"],
                 ];
 
 

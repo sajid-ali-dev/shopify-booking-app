@@ -35,4 +35,6 @@ Route::group(['middleware' => 'shopify.auth',  'prefix' => 'oshi'], function () 
 
     Route::get('data', [OshiController::class, 'getData']);
     Route::post('push-order', [OshiController::class, 'pushOrder']);
+    Route::post('client-validate', [OshiController::class, 'clientValidate']);
+    Route::get('check-crendentials', [OshiController::class, 'checkCredentials']);
 });

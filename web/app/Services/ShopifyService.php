@@ -111,7 +111,7 @@ class ShopifyService
             $line_items = "";
             foreach ($resp["line_items"] as $lineItem) {
                 $quantity += $lineItem["quantity"];
-                $line_items .= "{" . $lineItem["quantity"] . " X " . $lineItem["variant_title"] . "}";
+                $line_items .= "[" . $lineItem["quantity"] . " x " . $lineItem["variant_title"] . "]";
             }
             $orders[] = [
                 "id" => $resp["id"],

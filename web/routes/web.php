@@ -35,10 +35,12 @@ use App\Http\Controllers\ShopifyController;
 */
 
 Route::get("/test", function () {
-    return phpinfo();
+
+    return "test";
 });
 
 Route::fallback(function (Request $request) {
+    
     if (Context::$IS_EMBEDDED_APP &&  $request->query("embedded", false) === "1") {
         if (env('APP_ENV') === 'production') {
             return file_get_contents(public_path('index.html'));
@@ -51,6 +53,7 @@ Route::fallback(function (Request $request) {
 })->middleware('shopify.installed');
 
 Route::get('/api/auth', function (Request $request) {
+   
     $shop = Utils::sanitizeShopDomain($request->query('shop'));
 
     // Delete any previously created OAuth sessions that were not completed (don't have an access token)
@@ -60,6 +63,7 @@ Route::get('/api/auth', function (Request $request) {
 });
 
 Route::get('/api/auth/callback', function (Request $request) {
+   
     $session = OAuth::callback(
         $request->cookie(),
         $request->query(),
@@ -133,6 +137,7 @@ Route::post('/api/products', function (Request $request) {
 })->middleware('shopify.auth');
 
 Route::post('/api/webhooks', function (Request $request) {
+    
     try {
         $topic = $request->header(HttpHeaders::X_SHOPIFY_TOPIC, '');
 

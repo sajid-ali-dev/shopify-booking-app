@@ -43,21 +43,51 @@ if (host === "localhost") {
 }
 
 export default defineConfig({
-  root: dirname(fileURLToPath(import.meta.url)),
-  plugins: [react()],
-  define: {
-    "process.env.SHOPIFY_API_KEY": JSON.stringify(process.env.SHOPIFY_API_KEY),
-  },
-  resolve: {
-    preserveSymlinks: true,
-  },
-  server: {
-    host: "localhost",
-    port: process.env.FRONTEND_PORT,
-    hmr: hmrConfig,
-    proxy: {
-      "^/(\\?.*)?$": proxyOptions,
-      "^/api(/|(\\?.*)?$)": proxyOptions,
+    root: dirname(fileURLToPath(import.meta.url)),
+    plugins: [react()],
+    define: {
+        "process.env.SHOPIFY_API_KEY": JSON.stringify(
+            process.env.SHOPIFY_API_KEY,
+        ),
     },
-  },
+    resolve: {
+        preserveSymlinks: true,
+    },
+    server: {
+        host: "localhost",
+        port: process.env.FRONTEND_PORT,
+        hmr: hmrConfig,
+        proxy: {
+            "^/(\\?.*)?$": proxyOptions,
+            "^/api(/|(\\?.*)?$)": proxyOptions,
+        },
+    },
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (id.includes("node_modules")) {
+                        if (id.includes("@shopify")) {
+                            // Split each Shopify package in a separate chunk
+                            return (
+                                "shopify-" +
+                                id
+                                    .toString()
+                                    .split("node_modules/")[1]
+                                    .split("@shopify/")[1]
+                                    .split("/")[0]
+                                    .toString()
+                            );
+                        }
+
+                        return id
+                            .toString() // Split each node module package in a separate chunk
+                            .split("node_modules/")[1]
+                            .split("/")[0]
+                            .toString();
+                    }
+                },
+            },
+        },
+    },
 });

@@ -11,6 +11,7 @@ import {
     Checkbox,
     Button,
     LegacyStack,
+    CalloutCard,
 } from "@shopify/polaris";
 
 import { useState, useEffect } from "react";
@@ -18,16 +19,18 @@ import { TitleBar } from "@shopify/app-bridge-react";
 import { useTranslation } from "react-i18next";
 import { useAuthenticatedFetch } from "../hooks";
 import { Toast } from "@shopify/app-bridge-react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import "./Index.css";
 
 const HomePage = () => {
+    const navigate = useNavigate();
     const emptyToastProps = { content: null };
     const [toastProps, setToastProps] = useState(emptyToastProps);
     const { t } = useTranslation();
 
     const [isLoading, setIsLoading] = useState(true);
     const [isBooking, setIsBooking] = useState(false);
+    const [isConfigured, setIsConfigured] = useState(false);
     const [showNotification, setShowNotification] = useState(false);
     const [globalShipper, setGlobalShipper] = useState("");
 
@@ -51,11 +54,34 @@ const HomePage = () => {
     const [rowData, setRowData] = useState([]);
 
     useEffect(() => {
-        const ids = searchParams.getAll("ids[]").toString();
-        fetchOrders(ids);
+        initialLoad();
     }, []);
 
+    function initialLoad() {
+        const url = "api/oshi/check-crendentials";
+        fetch(url, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+
+                if (data.success) {
+                    const ids = searchParams.getAll("ids[]").toString();
+                    fetchOrders(ids);
+                    setIsConfigured(true);
+                } else {
+                    setIsLoading(false);
+                }
+            });
+    }
+
     function fetchOrders(ids) {
+        if (ids == "") {
+            setIsLoading(false);
+            return;
+        }
         const SHOPIFY_ORDERS_LIST = "api/shopify/orders";
         const url = SHOPIFY_ORDERS_LIST + "?ids=" + ids;
         fetch(url, {
@@ -83,13 +109,13 @@ const HomePage = () => {
     };
 
     const handlePushOrder = () => {
-        setIsBooking(true);
+        //  setIsBooking(true);
 
         const isCityMissing = rowData.some(
-            (obj) => !obj.hasOwnProperty("city"),
+            (obj) => !obj.hasOwnProperty("city") || obj.city === 0,
         );
         const isShipperMissing = rowData.some(
-            (obj) => !obj.hasOwnProperty("shipper"),
+            (obj) => !obj.hasOwnProperty("shipper") || obj.shipper === 0,
         );
 
         if (isCityMissing) {
@@ -105,6 +131,7 @@ const HomePage = () => {
             });
             setIsBooking(false);
         } else {
+            return true;
             const PUSH_ORDER = "api/oshi/push-order";
             const url = PUSH_ORDER;
             fetch(url, {
@@ -129,6 +156,7 @@ const HomePage = () => {
     };
 
     const handleRowDataChange = (index, fieldName, value) => {
+        console.log("vale", value);
         const updatedRowData = [...rowData];
         updatedRowData[index] = {
             ...updatedRowData[index],
@@ -164,6 +192,10 @@ const HomePage = () => {
         console.log(updatedRowData);
     };
 
+    const handleAction = () => {
+        navigate("/settings");
+    };
+
     const rowMarkup = orders.map(({ id, name }, index) => (
         <IndexTable.Row id={id} key={id} position={index}>
             <IndexTable.Cell>
@@ -192,14 +224,14 @@ const HomePage = () => {
                 <Select
                     options={cities}
                     onChange={(e) => handleRowDataChange(index, "city", e)}
-                    value={rowData[index] ? rowData[index].city : ""}
+                    value={rowData[index] ? rowData[index].city : 0}
                 />
             </IndexTable.Cell>
             <IndexTable.Cell>
                 <Select
                     options={shippers}
                     onChange={(e) => handleRowDataChange(index, "shipper", e)}
-                    value={rowData[index] ? rowData[index].shipper : ""}
+                    value={rowData[index] ? rowData[index].shipper : 0}
                 />
             </IndexTable.Cell>
             {/* <IndexTable.Cell>
@@ -247,6 +279,17 @@ const HomePage = () => {
     ));
     return isLoading ? (
         <Spinner />
+    ) : !isConfigured ? (
+        <CalloutCard
+            title={"Configuration"}
+            illustration="https://cdn.shopify.com/s/assets/admin/checkout/settings-customizecart-705f57c725ac05be5a34ec20c05b94298cb8afd10aac7bd9c7ad02030f48cfa0.svg"
+            primaryAction={{
+                content: "Click here",
+                onAction: handleAction,
+            }}
+        >
+            <p>Please provide client ID and Access token</p>
+        </CalloutCard>
     ) : (
         <>
             {showNotification ? (

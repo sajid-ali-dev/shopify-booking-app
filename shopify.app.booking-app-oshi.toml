@@ -1,14 +1,14 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "ef4ed3c244eb57d223a52f776ed9f6fd"
-name = "oshi-app"
-handle = "oshi-app"
-application_url = "https://campus-guards-sans-conferencing.trycloudflare.com"
+client_id = "e44b01c64708bd1b552ad087a1650b52"
+name = "Booking App Oshi"
+handle = "booking-app-oshi"
+application_url = "https://b485-111-88-125-143.ngrok-free.app/"
 embedded = true
 
 [build]
-automatically_update_urls_on_dev = true
-dev_store_url = "sajid-development-store.myshopify.com"
+automatically_update_urls_on_dev = false
+dev_store_url = "quickstart-0e519633.myshopify.com"
 include_config_on_deploy = true
 
 [access_scopes]
@@ -16,11 +16,7 @@ include_config_on_deploy = true
 scopes = "read_assigned_fulfillment_orders,read_customers,read_fulfillments,read_locations,read_merchant_managed_fulfillment_orders,read_order_edits,read_orders,read_third_party_fulfillment_orders,write_assigned_fulfillment_orders,write_fulfillments,write_locations,write_merchant_managed_fulfillment_orders,write_order_edits,write_orders,write_third_party_fulfillment_orders"
 
 [auth]
-redirect_urls = [
-  "https://campus-guards-sans-conferencing.trycloudflare.com/auth/callback",
-  "https://campus-guards-sans-conferencing.trycloudflare.com/auth/shopify/callback",
-  "https://campus-guards-sans-conferencing.trycloudflare.com/api/auth/callback"
-]
+redirect_urls = [ "https://b485-111-88-125-143.ngrok-free.app/api/auth" ]
 
 [webhooks]
 api_version = "2024-04"
