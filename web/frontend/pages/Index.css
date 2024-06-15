@@ -6,14 +6,20 @@
 }
 
 .notification-bar {
-    border: 2px solid green;
-    padding: 10px 372px;
-    background-color: green;
+    /* padding: 10px 372px; */
     color: white;
 }
 
 .notification-bar span {
-    float: right;
-    margin-right: -175%;
+margin-left: 99%;
     cursor: pointer;
+}
+.success-message {
+    border: 2px solid green;
+    background-color: green;
+}
+
+.error-message {
+    border: 2px solid red;
+    background-color: red;
 }

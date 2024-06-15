@@ -33,6 +33,7 @@ const HomePage = () => {
     const [isConfigured, setIsConfigured] = useState(false);
     const [showNotification, setShowNotification] = useState(false);
     const [globalShipper, setGlobalShipper] = useState("");
+    const [errors, setErrors] = useState([]);
 
     const toastMarkup = toastProps.content && (
         <Toast
@@ -109,29 +110,46 @@ const HomePage = () => {
     };
 
     const handlePushOrder = () => {
-        //  setIsBooking(true);
+        setIsBooking(true);
 
-        const isCityMissing = rowData.some(
-            (obj) => !obj.hasOwnProperty("city") || obj.city === 0,
-        );
-        const isShipperMissing = rowData.some(
-            (obj) => !obj.hasOwnProperty("shipper") || obj.shipper === 0,
-        );
+        let allErrors = [];
+        rowData.map((data) => {
+            let error = "" + data.name + "";
+            if (data.phone == "") {
+                error += " Phone number,";
+            }
 
-        if (isCityMissing) {
-            setToastProps({
-                content: "Missing City",
-                error: true,
-            });
-            setIsBooking(false);
-        } else if (isShipperMissing) {
-            setToastProps({
-                content: "Missing Shipper",
-                error: true,
-            });
+            if (data.address == "") {
+                error += " Address,";
+            }
+
+            if (data.city == "0" || data.city == "") {
+                error += " City,";
+            }
+
+            if (data.shipper == "0" || !data.shipper) {
+                error += " Shipper,";
+            }
+
+            if (data.amount == "0") {
+                error += " Amount,";
+            }
+
+            if (data.weight == "0") {
+                error += " Weight,";
+            }
+
+            if (error == data.name) {
+            } else {
+                error += " Missing";
+                allErrors.push(error);
+            }
+        });
+
+        if (allErrors.length > 0) {
+            setErrors(allErrors);
             setIsBooking(false);
         } else {
-            return true;
             const PUSH_ORDER = "api/oshi/push-order";
             const url = PUSH_ORDER;
             fetch(url, {
@@ -295,11 +313,23 @@ const HomePage = () => {
             {showNotification ? (
                 <Page>
                     <LegacyStack vertical spacing="extraTight">
-                        <div className="notification-bar">
-                            Orders has been pushed to oshi
+                        <div className="notification-bar success-message">
                             <span onClick={() => setShowNotification(false)}>
                                 X
                             </span>
+                            <div>Orders has been pushed to oshi</div>
+                        </div>
+                    </LegacyStack>
+                </Page>
+            ) : null}
+            {errors.length > 0 ? (
+                <Page>
+                    <LegacyStack vertical spacing="extraTight">
+                        <div className="notification-bar error-message">
+                            <span onClick={() => setErrors([])}>X</span>
+                            {errors.map((err, index) => {
+                                return <div key={index}>{err}</div>;
+                            })}
                         </div>
                     </LegacyStack>
                 </Page>
