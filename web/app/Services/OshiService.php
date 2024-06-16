@@ -47,11 +47,11 @@ class OshiService
 
 
                 $response = $this->oshiApiPostCall($auth['token'], "bookingapi", $body);
-
+                Log::info(json_encode($body));
                 Log::info("oshi req");
-                Log::info($response["success"]);
+                Log::info(json_encode($response));
 
-                if ($response["success"]) {
+                if ($response["success"] === "true") {
                     //get location api
                     $orderId = $data["id"];
                     Log::info("here");

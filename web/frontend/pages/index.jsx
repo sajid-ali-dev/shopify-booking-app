@@ -110,7 +110,7 @@ const HomePage = () => {
     };
 
     const handlePushOrder = () => {
-        setIsBooking(true);
+        // setIsBooking(true);
 
         let allErrors = [];
         rowData.map((data) => {
@@ -317,7 +317,9 @@ const HomePage = () => {
                             <span onClick={() => setShowNotification(false)}>
                                 X
                             </span>
-                            <div>Orders has been pushed to oshi</div>
+                            <div className="success-text">
+                                Orders has been pushed to oshi
+                            </div>
                         </div>
                     </LegacyStack>
                 </Page>
