@@ -22,9 +22,10 @@ class OshiService
     public function pushOrder($payload, $session)
     {
         $auth = $this->getOshiAuth();
+        $succcess = [];
+        $errors = [];
 
         try {
-            $isSuccessFull = false;
             foreach ($payload as $data) {
                 $body = [
                     "clients" => $auth['client_id'],
@@ -47,21 +48,25 @@ class OshiService
 
 
                 $response = $this->oshiApiPostCall($auth['token'], "bookingapi", $body);
-                Log::info(json_encode($body));
-                Log::info("oshi req");
-                Log::info(json_encode($response));
 
                 if ($response["success"] === "true") {
                     //get location api
                     $orderId = $data["id"];
-                    Log::info("here");
-                    $this->shopifyService->fullfillOrderOnShopify($orderId, $session,  $response);
+                    $fulfilledOnShopify = $this->shopifyService->fullfillOrderOnShopify($orderId, $session,  $response);
 
-                    $isSuccessFull =  true;
+                    if ($fulfilledOnShopify) {
+                        $succcess[] = $data['name'] . " Successfully Pushed";
+                    } else {
+                        $errors[] = $data['name'] . " Something wrong try again";
+                    }
+                } else {
+                    $errors[] = $data['name'] . " " . $response["errors"];
                 }
             }
-
-            return  $isSuccessFull;
+            return  [
+                'success' => $succcess,
+                'errors' => $errors
+            ];
         } catch (Exception $ex) {
             return false;
         }

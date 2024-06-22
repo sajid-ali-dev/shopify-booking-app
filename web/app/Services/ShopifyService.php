@@ -20,7 +20,7 @@ class ShopifyService
 
     public function fullfillOrderOnShopify($orderId, $session, $oshiResponse)
     {
-        Log::info(json_encode($oshiResponse));
+        
 
         try {
             $response = $this->restService->getRequest(
@@ -107,6 +107,8 @@ class ShopifyService
 
 
         foreach ($response['orders'] as $resp) {
+            Log::info("object");
+            Log::info(json_encode($resp));
             $quantity = 0;
             $line_items = "";
             foreach ($resp["line_items"] as $lineItem) {

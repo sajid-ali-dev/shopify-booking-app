@@ -31,9 +31,9 @@ const HomePage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isBooking, setIsBooking] = useState(false);
     const [isConfigured, setIsConfigured] = useState(false);
-    const [showNotification, setShowNotification] = useState(false);
     const [globalShipper, setGlobalShipper] = useState("");
     const [errors, setErrors] = useState([]);
+    const [success, setSuccess] = useState([]);
 
     const toastMarkup = toastProps.content && (
         <Toast
@@ -110,7 +110,7 @@ const HomePage = () => {
     };
 
     const handlePushOrder = () => {
-        // setIsBooking(true);
+        setIsBooking(true);
 
         let allErrors = [];
         rowData.map((data) => {
@@ -159,14 +159,10 @@ const HomePage = () => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log("response");
-                    console.log(data);
-                    if (data) {
-                        // setToastProps({
-                        //     content: "Orders has been pushed",
-                        // });
-                        setIsBooking(false);
-                        setShowNotification(true);
+                    setIsBooking(false);
+                    if (data != false) {
+                        setErrors(data.errors);
+                        setSuccess(data.success);
                     }
                 })
                 .catch((error) => {});
@@ -310,16 +306,14 @@ const HomePage = () => {
         </CalloutCard>
     ) : (
         <>
-            {showNotification ? (
+            {success.length > 0 ? (
                 <Page>
                     <LegacyStack vertical spacing="extraTight">
                         <div className="notification-bar success-message">
-                            <span onClick={() => setShowNotification(false)}>
-                                X
-                            </span>
-                            <div className="success-text">
-                                Orders has been pushed to oshi
-                            </div>
+                            <span onClick={() => setSuccess([])}>X</span>
+                            {success.map((msg, index) => {
+                                return <div key={index}>{msg}</div>;
+                            })}
                         </div>
                     </LegacyStack>
                 </Page>
