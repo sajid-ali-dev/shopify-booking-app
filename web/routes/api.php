@@ -62,7 +62,7 @@ Route::post('/customers/data_request', function () {
 });
 
 // Customer Data request Webhook
-Route::post('/redact/redact', function () {
+Route::post('/shop/redact', function () {
 
     $hmac_header = $_SERVER['HTTP_X_SHOPIFY_HMAC_SHA256'];
 
