@@ -331,22 +331,38 @@ const HomePage = () => {
                 </Page>
             ) : null}
             <Page>
-                <LegacyStack vertical spacing="extraTight">
+                <div
+                    style={{
+                        alignItems: "center",
+                        width: "50%",
+                        float: "right",
+                        marginRight: "82%",
+                    }}
+                >
                     <Select
                         label="Select Shipper"
                         options={shippers}
                         onChange={handleGlobalShipper}
                         value={globalShipper}
+                        style={{ width: "50%" }}
                     />
+                </div>
+                <div
+                    style={{
+                        float: "right",
+                        marginRight: "74%",
+                        marginTop: "-36px",
+                    }}
+                >
                     <Button onClick={applyGlobalShipper}>Apply</Button>
-                </LegacyStack>
+                </div>
             </Page>
             <Page fullWidth>
                 {toastMarkup}
                 <TitleBar
                     title={t("Orders.title")}
                     primaryAction={{
-                        content: "Book Order(s)",
+                        content: "Push Order(s)",
                         onAction: handlePushOrder,
                         loading: isBooking,
                     }}
