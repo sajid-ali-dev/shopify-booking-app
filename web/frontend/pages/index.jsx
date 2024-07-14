@@ -330,33 +330,35 @@ const HomePage = () => {
                     </LegacyStack>
                 </Page>
             ) : null}
-            <Page>
-                <div
-                    style={{
-                        alignItems: "center",
-                        width: "50%",
-                        float: "right",
-                        marginRight: "82%",
-                    }}
-                >
-                    <Select
-                        label="Select Shipper"
-                        options={shippers}
-                        onChange={handleGlobalShipper}
-                        value={globalShipper}
-                        style={{ width: "50%" }}
-                    />
-                </div>
-                <div
-                    style={{
-                        float: "right",
-                        marginRight: "74%",
-                        marginTop: "-36px",
-                    }}
-                >
-                    <Button onClick={applyGlobalShipper}>Apply</Button>
-                </div>
-            </Page>
+            {orders.length > 0 ? (
+                <Page>
+                    <div
+                        style={{
+                            alignItems: "center",
+                            width: "50%",
+                            float: "right",
+                            marginRight: "82%",
+                        }}
+                    >
+                        <Select
+                            label="Select Shipper"
+                            options={shippers}
+                            onChange={handleGlobalShipper}
+                            value={globalShipper}
+                            style={{ width: "50%" }}
+                        />
+                    </div>
+                    <div
+                        style={{
+                            float: "right",
+                            marginRight: "74%",
+                            marginTop: "-36px",
+                        }}
+                    >
+                        <Button onClick={applyGlobalShipper}>Apply</Button>
+                    </div>
+                </Page>
+            ) : null}
             <Page fullWidth>
                 {toastMarkup}
                 <TitleBar
@@ -365,6 +367,7 @@ const HomePage = () => {
                         content: "Push Order(s)",
                         onAction: handlePushOrder,
                         loading: isBooking,
+                        disabled: orders.length > 0 ? false : true,
                     }}
                     // secondaryActions={[
                     //     {
@@ -373,6 +376,7 @@ const HomePage = () => {
                     //     },
                     // ]}
                 />
+
                 <Layout>
                     <Layout.Section>
                         <LegacyCard>
